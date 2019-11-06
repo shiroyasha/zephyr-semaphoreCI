@@ -26,7 +26,7 @@ blocks:
           type: e1-standard-2
           os_image: ubuntu1804
         containers:
-          - name: main
+          - name: ci
             image: 'zephyrprojectrtos/ci:v0.9.1'
       epilogue:
         on_pass:
