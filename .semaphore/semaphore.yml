@@ -8,15 +8,19 @@ blocks:
   - name: Build
     task:
       jobs:
-        - name: 'Job #1'
+        - name: Build
           commands:
             - checkout
       env_vars:
-        - name: FOO_1
-          value: BAR_1
+        - name: MATRIX_BUILDS
+          value: '5'
+        - name: ZEPHYR_TOOLCHAIN_VARIANT
+          value: zephyr
+        - name: ZEPHYR_SDK_INSTALL_DIR
+          value: /opt/sdk/zephyr-sdk-0.10.3
       agent:
         machine:
-          type: e1-standard-2
+          type: e1-standard-8
           os_image: ubuntu1804
         containers:
           - name: main
