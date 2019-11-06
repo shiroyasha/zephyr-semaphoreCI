@@ -40,4 +40,4 @@ blocks:
               ./scripts/ci/run_ci.sh -f -b ${SEMAPHORE_GIT_BRANCH} -r origin -m
               ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
     skip:
-      when: branch != 'master' AND !'v*-branch' AND !'topic-*'
+      when: branch != 'master' AND branch != 'v*-branch' AND branch != 'topic-*'
