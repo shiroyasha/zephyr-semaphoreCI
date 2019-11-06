@@ -5,7 +5,7 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Build
+  - name: CI
     task:
       jobs:
         - name: Build
@@ -39,3 +39,5 @@ blocks:
             - >-
               ./scripts/ci/run_ci.sh -f -b ${SEMAPHORE_GIT_BRANCH} -r origin -m
               ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
+    skip:
+      when: branch != 'master' AND !'v*-branch' AND !'topic-*'
