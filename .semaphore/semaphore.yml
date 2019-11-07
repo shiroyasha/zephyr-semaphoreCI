@@ -10,8 +10,7 @@ blocks:
       jobs:
         - name: Build
           commands:
-            - docker run -d -e IS_NEW_BUILD_RUNNER_SUBSCRIPTION=true -e MAX_LOG_LINES_TO_FLUSH=20 -e MAX_LOGS_FLUSH_WAIT_TIME_IN_S=3 -e LOGS_FILE_READ_WAIT_TIME_IN_S=0.1 -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave -v /home/shippable/cexec:/home/shippable/cexec -v /home/shippable/cache:/home/shippable/cache -v /tmp/cexec:/tmp/cexec -v /opt/docker/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v /build:/build -v /root/node:/build/node --name=c.exec.zephyr.23902.1 --entrypoint=/home/shippable/cexec/build.sh -e RUN_MODE=production -e SHIPPABLE_API_URL=https://con.shippable.com -e SHIPPABLE_API_RETRY_INTERVAL=3 -e SHIPPABLE_CONTAINER_NAME=c.exec.zephyr.23902.1 -e SHIPPABLE_IS_OFFICIAL_IMAGE=false -e SHIPPABLE_DOCKER_VERSION=1.13.0 -e SHIPPABLE_IS_LEGACY_IMAGE=false -e SHIPPABLE_NODE_ARCHITECTURE=x86_64 -e SHIPPABLE_NODE_OPERATING_SYSTEM=Ubuntu_14.04 zephyrprojectrtos/ci:v0.9.1
-            # - checkout
+            - checkout
             - export CCACHE_DIR=./ccache/.ccache
             - >
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
@@ -35,13 +34,13 @@ blocks:
           value: zephyr
         - name: ZEPHYR_SDK_INSTALL_DIR
           value: /opt/sdk/zephyr-sdk-0.10.3
-      # agent:
-      #   machine:
-      #     type: e1-standard-2
-      #     os_image: ubuntu1804
-      #   containers:
-      #     - name: ci
-      #       image: 'zephyrprojectrtos/ci:v0.9.1'
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: ci
+            image: 'zephyrprojectrtos/ci:v0.9.1'
       epilogue:
         on_pass:
           commands:
