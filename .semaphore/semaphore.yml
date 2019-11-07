@@ -4,7 +4,6 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: CI
     task:
@@ -22,8 +21,13 @@ blocks:
               fi;
             - ccache -s
           matrix:
-              - env_var: MATRIX_BUILD
-                values: ["1", "2", "3", "4", "5"]
+            - env_var: MATRIX_BUILD
+              values:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
       env_vars:
         - name: MATRIX_BUILDS
           value: '5'
