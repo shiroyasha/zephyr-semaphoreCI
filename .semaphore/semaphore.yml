@@ -4,6 +4,11 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+
+matrix:
+    - env_var: MATRIX_BUILD
+      values: ["1", "2", "3", "4", "5"]
+
 blocks:
   - name: CI
     task:
