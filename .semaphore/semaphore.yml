@@ -41,6 +41,9 @@ blocks:
         containers:
           - name: ci
             image: 'zephyrprojectrtos/ci:v0.9.1'
+            env_vars:
+              - name: HOME
+                value: /home/buildslave
       epilogue:
         on_pass:
           commands:
