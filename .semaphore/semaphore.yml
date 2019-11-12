@@ -10,6 +10,7 @@ blocks:
       jobs:
         - name: Build
           commands:
+            - docker run --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - checkout
             - |
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
@@ -33,16 +34,8 @@ blocks:
           value: zephyr
         - name: ZEPHYR_SDK_INSTALL_DIR
           value: /opt/sdk/zephyr-sdk-0.10.3
-      agent:
-        machine:
-          type: e1-standard-4
-          os_image: ubuntu1804
-        containers:
-          - name: ci
-            image: 'zephyrprojectrtos/ci:v0.9.1'
-            env_vars:
-              - name: HOME
-                value: /home/buildslave
+        - name: HOME
+          value: /home/buildslave
       epilogue:
         on_pass:
           commands:
@@ -50,7 +43,7 @@ blocks:
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
               ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
               -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p
-              ${PULL_RSEMAPHORE_GIT_PR_NUMBEREQUEST}; else
+              ${SEMAPHORE_GIT_PR_NUMBER}; else
               ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_BRANCH} -r origin -m
               ${MATRIX_BUILD} -M ${MATRIX_BUILDS}; fi;
         on_fail:
