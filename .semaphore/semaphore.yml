@@ -11,8 +11,6 @@ blocks:
         - name: Build
           commands:
             # - sleep 300
-            - sudo apt-get install -y zsh
-            - zsh
             - checkout
             - export PATH=$PATH:/home/semaphore/.local/bin
             - pip install --user -r ./scripts/requirements.txt
