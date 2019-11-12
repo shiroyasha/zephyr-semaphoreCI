@@ -15,7 +15,7 @@ blocks:
             - export PATH=$PATH:/home/semaphore/.local/bin
             - pip3 install --user --upgrade virtualenv
             - virtualenv ${SEMAPHORE_PROJECT_NAME} && source ${SEMAPHORE_PROJECT_NAME}/bin/activate
-            - pip3 install --user --upgrade -r ./scripts/requirements.txt
+            - pip3 install --user -r ./scripts/requirements.txt
             - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - |-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
