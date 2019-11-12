@@ -10,15 +10,15 @@ blocks:
       jobs:
         - name: Build
           commands:
+            - sleep 300
             - docker run --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - checkout
-            - |
+            - |-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
                 ./scripts/ci/run_ci.sh -c -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p ${SEMAPHORE_GIT_PR_NUMBER};
               else
                 ./scripts/ci/run_ci.sh -c -b ${SEMAPHORE_GIT_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
               fi;
-            - ccache -s
           matrix:
             - env_var: MATRIX_BUILD
               values:
@@ -40,6 +40,7 @@ blocks:
         on_pass:
           commands:
             - >-
+              checkout
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
               ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
               -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p
@@ -49,6 +50,7 @@ blocks:
         on_fail:
           commands:
             - >-
+              checkout
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
               ./scripts/ci/run_ci.sh -f -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
               -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p
