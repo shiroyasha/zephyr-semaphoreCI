@@ -286,11 +286,11 @@ if [ -n "$MAIN_CI" ]; then
 	fi
 
 	# Save list of tests to be run
-	python ${SANITYCHECK} ${SANITYCHECK_OPTIONS} --save-tests test_file_3.txt || exit 1
+	python3 ${SANITYCHECK} ${SANITYCHECK_OPTIONS} --save-tests test_file_3.txt || exit 1
 	cat test_file_1.txt test_file_2.txt test_file_3.txt > test_file.txt
 
 	# Run a subset of tests based on matrix size
-	python ${SANITYCHECK} ${SANITYCHECK_OPTIONS} --load-tests test_file.txt \
+	python3 ${SANITYCHECK} ${SANITYCHECK_OPTIONS} --load-tests test_file.txt \
 		--subset ${MATRIX}/${MATRIX_BUILDS} --retry-failed 3
 
 	# cleanup
