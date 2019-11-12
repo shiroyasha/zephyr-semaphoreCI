@@ -12,7 +12,6 @@ blocks:
           commands:
             # - sleep 300
             - checkout
-            - export PATH=$PATH:/home/semaphore/.local/bin
             - sudo -H pip install --upgrade -r ./scripts/requirements.txt
             - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - |-
