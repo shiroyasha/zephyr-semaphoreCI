@@ -11,10 +11,10 @@ blocks:
         - name: Build
           commands:
             # - sleep 300
-            - export PATH=$PATH:/home/semaphore/.local/bin
-            - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - checkout
-            - pip3 install --user -r ./scripts/requiements.txt
+            - export PATH=$PATH:/home/semaphore/.local/bin
+            - pip install --user -r ./scripts/requiements.txt
+            - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - |-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
                 ./scripts/ci/run_ci.sh -c -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p ${SEMAPHORE_GIT_PR_NUMBER};
