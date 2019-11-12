@@ -13,7 +13,7 @@ blocks:
             # - sleep 300
             - checkout
             - export PATH=$PATH:/home/semaphore/.local/bin
-            - pip install --user -r ./scripts/requiements.txt
+            - pip install --user -r ./scripts/requirements.txt
             - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - |-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
@@ -39,7 +39,6 @@ blocks:
       epilogue:
         on_pass:
           commands:
-            - checkout
             - >-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
               ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
@@ -49,7 +48,6 @@ blocks:
               ${MATRIX_BUILD} -M ${MATRIX_BUILDS}; fi;
         on_fail:
           commands:
-            - checkout
             - >-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
               ./scripts/ci/run_ci.sh -f -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
