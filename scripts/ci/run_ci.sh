@@ -285,9 +285,6 @@ if [ -n "$MAIN_CI" ]; then
 		get_tests_to_run
 	fi
 
-	# Workaround for not finding installed requirements
-	export PATH=$PATH:/home/semaphore/.local/lib
-
 	# Save list of tests to be run
 	${SANITYCHECK} ${SANITYCHECK_OPTIONS} --save-tests test_file_3.txt || exit 1
 	cat test_file_1.txt test_file_2.txt test_file_3.txt > test_file.txt
