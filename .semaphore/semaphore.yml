@@ -11,7 +11,8 @@ blocks:
         - name: Build
           commands:
             # - sleep 300
-            - pip3 install --user west pyserial 
+            - export PATH=$PATH:/home/semaphore/.local/bin
+            - pip install --user --upgrade west pyserial
             - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
             - checkout
             - |-
