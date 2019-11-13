@@ -11,12 +11,19 @@ blocks:
         - name: Build
           commands:
             - checkout
-            - sleep 300
+            # - sleep 300
             - >-
-              docker run --env-file /home/semaphore/zephyr/.semaphore/docker_env -e HOME=/home/buildslave 
-              -e MATRIX_BUILD=${MATRIX_BUILD} --user buildslave --privileged=true --tty 
-              --net=bridge -v /var/run/docker.sock:/var/run/docker.sock -v /home/semaphore/zephyr:/home/semaphore/zephyr
-              --entrypoint /home/semaphore/zephyr/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
+              docker run 
+              --env-file /home/semaphore/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_env 
+              -e HOME=/home/buildslave 
+              -e MATRIX_BUILD=${MATRIX_BUILD} 
+              -v /var/run/docker.sock:/var/run/docker.sock 
+              -v /home/semaphore/${SEMAPHORE_PROJECT_NAME}:/home/semaphore/${SEMAPHORE_PROJECT_NAME}
+              --user buildslave 
+              --privileged=true 
+              --tty 
+              --net=bridge 
+              --entrypoint /home/semaphore/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
           matrix:
             - env_var: MATRIX_BUILD
               values: ["1", "2", "3", "4", "5"]    
