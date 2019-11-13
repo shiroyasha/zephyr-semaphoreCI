@@ -14,8 +14,8 @@ blocks:
             - >-
               docker run --env-file .semaphore/docker_env -e HOME=/home/buildslave 
               -e MATRIX_BUILD=${MATRIX_BUILD} --user buildslave --privileged=true --tty 
-              --net=bridge -v /var/run/docker.sock:/var/run/docker.sock --name zephyr-build
-              --entrypoint .semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
+              --net=bridge -v /var/run/docker.sock:/var/run/docker.sock -v /home/semaphore/zephyr:/home/semaphore/zephyr
+              --entrypoint /home/semaphore/zephyr/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
           matrix:
             - env_var: MATRIX_BUILD
               values: ["1", "2", "3", "4", "5"]    
