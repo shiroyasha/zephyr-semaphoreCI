@@ -4,14 +4,16 @@ agent:
   machine:
     type: e1-standard-4
     os_image: ubuntu1804
-  containers:
-    - name: main
-      image: semaphoreci/ruby:2.6.1
 blocks:
   - name: CI
     task:
       jobs:
         - name: Build
           commands:
-            - checkout
-            - sleep 300
+            - >-
+              docker run -e HOME=/home/buildslave -e MATRIX_BUILD=${MATRIX_BUILD} --user buildslave --privileged=true --tty 
+              --net=bridge -v /var/run/docker.sock:/var/run/docker.sock --name zephyr-build
+              --entrypoint .semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
+          matrix:
+            - env_var: MATRIX_BUILD
+              values: ["1", "2", "3", "4", "5"]    
