@@ -9,7 +9,7 @@ blocks:
     task:
       jobs:
         - name: Build
-          parallelism: 2
+          parallelism: 10
           commands:
             - checkout
             # - sleep 300
