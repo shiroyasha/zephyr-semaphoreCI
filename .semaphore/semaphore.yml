@@ -9,14 +9,15 @@ blocks:
     task:
       jobs:
         - name: Build
+          parallelism: 2
           commands:
             - checkout
             # - sleep 300
             - >-
               docker run
-              -e MATRIX_BUILDS="10"
+              -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT}
               -e HOME=/home/buildslave
-              -e MATRIX_BUILD=${MATRIX_BUILD}
+              -e MATRIX_BUILD=${SEMAPHORE_JOB_INDEX}
               -v /home/semaphore/.toolbox:/home/buildslave/.toolbox
               -v /tmp:/tmp
               -v /var/run/docker.sock:/var/run/docker.sock
@@ -27,6 +28,6 @@ blocks:
               --tty
               --net=bridge
               --entrypoint /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
-          matrix:
-            - env_var: MATRIX_BUILD
-              values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]    
+          # matrix:
+          #   - env_var: MATRIX_BUILD
+          #     values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
