@@ -14,7 +14,7 @@ blocks:
             # - sleep 300
             - >-
               docker run
-              -e MATRIX_BUILDS="5"
+              -e MATRIX_BUILDS="10"
               -e HOME=/home/buildslave
               -e MATRIX_BUILD=${MATRIX_BUILD}
               -v /home/semaphore/.toolbox:/home/buildslave/.toolbox
@@ -29,4 +29,4 @@ blocks:
               --entrypoint /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.2
           matrix:
             - env_var: MATRIX_BUILD
-              values: ["1", "2", "3", "4", "5"]    
+              values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]    
