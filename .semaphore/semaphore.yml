@@ -11,47 +11,22 @@ blocks:
         - name: Build
           commands:
             - checkout
-            - sleep 300
+            # - sleep 300
             - >-
               docker run
-              -e SEMAPHORE=${SEMAPHORE}
-              -e SEMAPHORE_PROJECT_NAME=${SEMAPHORE_PROJECT_NAME}
-              -e SEMAPHORE_PROJECT_ID=${SEMAPHORE_PROJECT_ID}
-              -e SEMAPHORE_JOB_NAME=${SEMAPHORE_JOB_NAME}
-              -e SEMAPHORE_JOB_ID=${SEMAPHORE_JOB_ID}
-              -e SEMAPHORE_AGENT_MACHINE_TYPE=${SEMAPHORE_AGENT_MACHINE_TYPE}
-              -e SEMAPHORE_AGENT_MACHINE_OS_IMAGE=${SEMAPHORE_AGENT_MACHINE_OS_IMAGE}
-              -e SEMAPHORE_AGENT_MACHINE_ENVIRONMENT_TYPE=${SEMAPHORE_AGENT_MACHINE_ENVIRONMENT_TYPE}
-              -e SEMAPHORE_ORGANIZATION_URL=${SEMAPHORE_ORGANIZATION_URL}
-              -e SEMAPHORE_ARTIFACT_TOKEN=${SEMAPHORE_ARTIFACT_TOKEN}
-              -e SSH_PRIVATE_KEY_PATH=${SSH_PRIVATE_KEY_PATH}
-              -e SEMAPHORE_CACHE_PRIVATE_KEY_PATH=${SEMAPHORE_CACHE_PRIVATE_KEY_PATH}
-              -e SEMAPHORE_CACHE_USERNAME=${SEMAPHORE_CACHE_USERNAME}
-              -e SEMAPHORE_CACHE_URL=${SEMAPHORE_CACHE_URL}
-              -e SEMAPHORE_GIT_URL=${SEMAPHORE_GIT_URL}
-              -e SEMAPHORE_GIT_DIR=${SEMAPHORE_GIT_DIR}
-              -e SEMAPHORE_GIT_SHA=${SEMAPHORE_GIT_SHA}
-              -e SEMAPHORE_GIT_REPO_SLUG=${SEMAPHORE_GIT_REPO_SLUG}
-              -e SEMAPHORE_GIT_REF=${SEMAPHORE_GIT_REF}
-              -e SEMAPHORE_GIT_COMMIT_RANGE=${SEMAPHORE_GIT_COMMIT_RANGE}
-              -e SEMAPHORE_GIT_REF_TYPE=${SEMAPHORE_GIT_REF_TYPE}
-              -e SEMAPHORE_GIT_BRANCH=${SEMAPHORE_GIT_BRANCH}
-              -e SEMAPHORE_WORKFLOW_ID=${SEMAPHORE_WORKFLOW_ID}
-              -e SEMAPHORE_WORKFLOW_NUMBER=${SEMAPHORE_WORKFLOW_NUMBER}
-              -e SEMAPHORE_PIPELINE_ARTEFACT_ID=${SEMAPHORE_PIPELINE_ARTEFACT_ID}
-              -e SEMAPHORE_PIPELINE_ID=${SEMAPHORE_PIPELINE_ID}
-              -e SEMAPHORE_PIPELINE_0_ARTEFACT_ID=${SEMAPHORE_PIPELINE_0_ARTEFACT_ID}
               -e MATRIX_BUILDS="5"
               -e HOME=/home/buildslave
               -e MATRIX_BUILD=${MATRIX_BUILD}
+              -v /home/semaphore/.toolbox:/home/buildslave/.toolbox
+              -v /tmp:/tmp
               -v /var/run/docker.sock:/var/run/docker.sock
               -v /home/semaphore/.ssh:/home/buildslave/.ssh
-              -v /home/semaphore/${SEMAPHORE_PROJECT_NAME}/.semaphore:/home/buildslave/.semaphore
+              -v /home/semaphore/${SEMAPHORE_PROJECT_NAME}/:/home/buildslave/${SEMAPHORE_PROJECT_NAME}
               --user buildslave
               --privileged=true
               --tty
               --net=bridge
-              --entrypoint /home/buildslave/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
+              --entrypoint /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
           matrix:
             - env_var: MATRIX_BUILD
               values: ["1", "2", "3", "4", "5"]    
