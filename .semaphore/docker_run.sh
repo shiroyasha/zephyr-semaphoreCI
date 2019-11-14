@@ -4,8 +4,8 @@ set -o pipefail
 source ~/.toolbox/toolbox
 source /tmp/.env
 
-ZEPHYR_SDK_INSTALL_DIR=/opt/sdk/zephyr-sdk-0.10.3
-ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+export ZEPHYR_SDK_INSTALL_DIR=/opt/sdk/zephyr-sdk-0.10.3
+export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 
 if [ "${SEMAPHORE_GIT_REF_TYPE}" = "pull-request" ]; then
     IS_PULL_REQUEST="true";
