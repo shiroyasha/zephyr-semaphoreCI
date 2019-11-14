@@ -1,5 +1,5 @@
-#!/bin/bash -xe
-set -o pipefail
+#!/bin/bash
+set -exo pipefail
 
 source ~/.toolbox/toolbox
 source /tmp/.env
