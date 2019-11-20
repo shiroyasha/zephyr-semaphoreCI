@@ -27,16 +27,16 @@ fi;
 
 SUCCESS=$?
 
-if [ $SUCCESS -eq 0 ]; then
+if [ ${SUCCESS} -eq 0 ]; then
 # On success
-    if [ "$IS_PULL_REQUEST" = "true" ]; then
+    if [ "${IS_PULL_REQUEST}" = "true" ]; then
         ./scripts/ci/run_ci.sh -s -b ${PULL_REQUEST_BASE_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p ${PULL_REQUEST};
     else
         ./scripts/ci/run_ci.sh -s -b ${BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
     fi;
 else
 # On failure
-    if [ "$IS_PULL_REQUEST" = "true" ]; then
+    if [ "${IS_PULL_REQUEST}" = "true" ]; then
         ./scripts/ci/run_ci.sh -f -b ${PULL_REQUEST_BASE_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p ${PULL_REQUEST};
     else
         ./scripts/ci/run_ci.sh -f -b ${BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
