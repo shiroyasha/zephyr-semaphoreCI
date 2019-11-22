@@ -13,7 +13,7 @@ blocks:
             - df -h  
       jobs:
         - name: Build
-          parallelism: 5
+          parallelism: 20
           commands:
             - checkout
             - df -h
