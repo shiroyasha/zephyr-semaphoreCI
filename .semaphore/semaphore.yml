@@ -10,10 +10,10 @@ blocks:
       epilogue:
         always:
           commands:
-            - df -h  
+            - df -h
       jobs:
         - name: Build
-          parallelism: 20
+          parallelism: 10
           commands:
             - checkout
             - df -h
@@ -30,19 +30,15 @@ blocks:
             - sudo rm -rf /home/semaphore/.stack
             - sudo rm -rf /usr/lib/jvm
             - sudo rm -rf /opt/*
-            - df -h            
+            - df -h
             - >-
-              docker run
-              -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT}
-              -e HOME=/home/buildslave
-              -e MATRIX_BUILD=${SEMAPHORE_JOB_INDEX}
-              -v /home/semaphore/.toolbox:/home/buildslave/.toolbox
-              -v /tmp:/tmp
-              -v /var/run/docker.sock:/var/run/docker.sock
-              -v /home/semaphore/.ssh:/home/buildslave/.ssh
-              -v /home/semaphore/${SEMAPHORE_PROJECT_NAME}/:/home/buildslave/${SEMAPHORE_PROJECT_NAME}
-              --user buildslave
-              --privileged=true
-              --tty
-              --net=bridge
-              --entrypoint /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
+              docker run -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT} -e
+              HOME=/home/buildslave -e MATRIX_BUILD=${SEMAPHORE_JOB_INDEX} -v
+              /home/semaphore/.toolbox:/home/buildslave/.toolbox -v /tmp:/tmp -v
+              /var/run/docker.sock:/var/run/docker.sock -v
+              /home/semaphore/.ssh:/home/buildslave/.ssh -v
+              /home/semaphore/${SEMAPHORE_PROJECT_NAME}/:/home/buildslave/${SEMAPHORE_PROJECT_NAME}
+              --user buildslave --privileged=true --tty --net=bridge
+              --entrypoint
+              /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh
+              zephyrprojectrtos/ci:v0.9.1
