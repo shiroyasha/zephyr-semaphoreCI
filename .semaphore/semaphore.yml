@@ -2,16 +2,31 @@ version: v1.0
 name: Initial Pipeline
 agent:
   machine:
-    type: e1-standard-8
+    type: e1-standard-4
     os_image: ubuntu1804
 blocks:
   - name: CI
     task:
       jobs:
         - name: Build
-          parallelism: 10
+          parallelism: 30
           commands:
             - checkout
+            - df -h
+            - sudo tune2fs -m 1 /dev/mapper/semaphore--vm--vg-root
+            - sudo rm -rf /usr/local/golang/
+            - sudo rm -rf /home/semaphore/.phpbrew
+            - sudo rm -rf /home/semaphore/.kerl
+            - sudo rm -rf /home/semaphore/.sbt
+            - sudo rm -rf /home/semaphore/.nvm
+            - sudo rm -rf /home/semaphore/.npm
+            - sudo rm -rf /home/semaphore/.kiex
+            - sudo rm -rf /home/semaphore/.rustup
+            - sudo rm -rf /home/semaphore/.stack
+            - sudo rm -rf /home/semaphore/.stack
+            - sudo rm -rf /usr/lib/jvm
+            - sudo rm -rf /opt/*
+            - df -h
             - >-
               docker run
               -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT}
