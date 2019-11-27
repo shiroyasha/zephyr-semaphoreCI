@@ -9,7 +9,7 @@ blocks:
     task:
       jobs:
         - name: Build
-          parallelism: 30
+          parallelism: 13
           commands:
             - checkout
             - df -h
@@ -27,6 +27,7 @@ blocks:
             - sudo rm -rf /usr/lib/jvm
             - sudo rm -rf /opt/*
             - sudo rm -rf /etc/docker/daemon.json
+            - sudo service docker restart
             - df -h
             - >-
               docker run
