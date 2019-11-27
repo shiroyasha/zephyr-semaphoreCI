@@ -9,7 +9,7 @@ blocks:
     task:
       jobs:
         - name: Build
-          parallelism: 15
+          parallelism: 30
           commands:
             - checkout
             - df -h
