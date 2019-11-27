@@ -26,6 +26,7 @@ blocks:
             - sudo rm -rf /home/semaphore/.stack
             - sudo rm -rf /usr/lib/jvm
             - sudo rm -rf /opt/*
+            - sudo rm -rf /etc/docker/daemon.json
             - df -h
             - >-
               docker run
