@@ -4,62 +4,44 @@ agent:
   machine:
     type: e1-standard-4
     os_image: ubuntu1804
-global_job_config:
-  env_vars:
-    - name: MATRIX_BUILDS
-      value: '5'
-    - name: ZEPHYR_TOOLCHAIN_VARIANT
-      value: zephyr
-    - name: ZEPHYR_SDK_INSTALL_DIR
-      value: /home/semaphore/zephyr-sdk-0.10.3
 blocks:
   - name: CI
     task:
       jobs:
         - name: Build
+          parallelism: 13
           commands:
-            # - sleep 300
             - checkout
-            - wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.10.3/zephyr-sdk-0.10.3-setup.run
-            - chmod +x zephyr-sdk-0.10.3-setup.run && ./zephyr-sdk-0.10.3-setup.run -- -d /home/semaphore/zephyr-sdk-0.10.3
-            - export PATH=$PATH:/home/semaphore/.local/bin
-            - pip3 install --user --upgrade virtualenv
-            - virtualenv ${SEMAPHORE_PROJECT_NAME} && source ${SEMAPHORE_PROJECT_NAME}/bin/activate
-            - pip3 install --upgrade -r ./scripts/requirements.txt
-            - wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.10.3/zephyr-sdk-0.10.3-setup.run
-            - docker run -d -e HOME=/home/buildslave --privileged=true --tty --net=bridge --user buildslave zephyrprojectrtos/ci:v0.9.1
-            - |-
-              if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-                ./scripts/ci/run_ci.sh -c -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p ${SEMAPHORE_GIT_PR_NUMBER};
-              else
-                ./scripts/ci/run_ci.sh -c -b ${SEMAPHORE_GIT_BRANCH} -r origin -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS};
-              fi;
-          matrix:
-            - env_var: MATRIX_BUILD
-              values:
-                - '1'
-                - '2'
-                - '3'
-                - '4'
-                - '5'
-      epilogue:
-        on_pass:
-          commands:
+            - df -h
+            - sudo tune2fs -m 1 /dev/mapper/semaphore--vm--vg-root
+            - sudo rm -rf /usr/local/golang/
+            - sudo rm -rf /home/semaphore/.phpbrew
+            - sudo rm -rf /home/semaphore/.kerl
+            - sudo rm -rf /home/semaphore/.sbt
+            - sudo rm -rf /home/semaphore/.nvm
+            - sudo rm -rf /home/semaphore/.npm
+            - sudo rm -rf /home/semaphore/.kiex
+            - sudo rm -rf /home/semaphore/.rustup
+            - sudo rm -rf /home/semaphore/.stack
+            - sudo rm -rf /home/semaphore/.stack
+            - sudo rm -rf /usr/lib/jvm
+            - sudo rm -rf /opt/*
             - >-
-              if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-              ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
-              -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p
-              ${SEMAPHORE_GIT_PR_NUMBER}; else
-              ./scripts/ci/run_ci.sh -s -b ${SEMAPHORE_GIT_BRANCH} -r origin -m
-              ${MATRIX_BUILD} -M ${MATRIX_BUILDS}; fi;
-        on_fail:
-          commands:
+              echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
+            - sudo service docker restart
+            - df -h
             - >-
-              if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-              ./scripts/ci/run_ci.sh -f -b ${SEMAPHORE_GIT_PR_BRANCH} -r origin
-              -m ${MATRIX_BUILD} -M ${MATRIX_BUILDS} -p
-              ${SEMAPHORE_GIT_PR_NUMBER}; else ./scripts/ci/run_ci.sh -f -b
-              ${SEMAPHORE_GIT_BRANCH} -r origin -m ${MATRIX_BUILD} -M
-              ${MATRIX_BUILDS}; fi;
-    skip:
-      when: branch != 'master' AND branch != 'v*-branch' AND branch != 'topic-*'
+              docker run
+              -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT}
+              -e HOME=/home/buildslave
+              -e MATRIX_BUILD=${SEMAPHORE_JOB_INDEX}
+              -v /home/semaphore/.toolbox:/home/buildslave/.toolbox
+              -v /tmp:/tmp
+              -v /var/run/docker.sock:/var/run/docker.sock
+              -v /home/semaphore/.ssh:/home/buildslave/.ssh
+              -v /home/semaphore/${SEMAPHORE_PROJECT_NAME}/:/home/buildslave/${SEMAPHORE_PROJECT_NAME}
+              --user buildslave
+              --privileged=true
+              --tty
+              --net=bridge
+              --entrypoint /home/buildslave/${SEMAPHORE_PROJECT_NAME}/.semaphore/docker_run.sh zephyrprojectrtos/ci:v0.9.1
