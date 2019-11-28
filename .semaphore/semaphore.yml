@@ -13,7 +13,7 @@ blocks:
     task:
       jobs:
         - name: Build
-          parallelism: 20
+          parallelism: 40
           commands:
             - checkout
             - bash .semaphore/setup.sh
