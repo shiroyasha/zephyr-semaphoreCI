@@ -1,5 +1,5 @@
 version: v1.0
-name: Initial Pipeline
+name: Pipeline
 agent:
   machine:
     type: e1-standard-2
@@ -16,26 +16,8 @@ blocks:
           parallelism: 20
           commands:
             - checkout
-            - df -h
-            - sudo tune2fs -m 1 /dev/mapper/semaphore--vm--vg-root
-            - sudo rm -rf /usr/local/golang/
-            - sudo rm -rf /home/semaphore/.phpbrew
-            - sudo rm -rf /home/semaphore/.kerl
-            - sudo rm -rf /home/semaphore/.sbt
-            - sudo rm -rf /home/semaphore/.nvm
-            - sudo rm -rf /home/semaphore/.npm
-            - sudo rm -rf /home/semaphore/.kiex
-            - sudo rm -rf /home/semaphore/.rustup
-            - sudo rm -rf /home/semaphore/.stack
-            - sudo rm -rf /home/semaphore/.stack
-            - sudo rm -rf /usr/lib/jvm
-            - sudo rm -rf /opt/*
-            - >-
-              echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
-            - sudo service docker restart
-            - df -h
+            - bash .semaphore/setup.sh
             - docker pull zephyrprojectrtos/ci:v0.9.1
-            - df -h
             - >-
               docker run
               -e MATRIX_BUILDS=${SEMAPHORE_JOB_COUNT}
