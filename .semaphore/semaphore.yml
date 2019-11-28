@@ -6,14 +6,14 @@ agent:
     os_image: ubuntu1804
 
 execution_time_limit:
-  minutes: 10
+  minutes: 40
 
 blocks:
   - name: CI
     task:
       jobs:
         - name: Build
-          parallelism: 40
+          parallelism: 10
           commands:
             - checkout
             - bash .semaphore/setup.sh
