@@ -2,14 +2,18 @@ version: v1.0
 name: Initial Pipeline
 agent:
   machine:
-    type: e1-standard-4
+    type: e1-standard-2
     os_image: ubuntu1804
+
+execution_time_limit:
+  minutes: 20
+
 blocks:
   - name: CI
     task:
       jobs:
         - name: Build
-          parallelism: 13
+          parallelism: 20
           commands:
             - checkout
             - df -h
@@ -26,9 +30,10 @@ blocks:
             - sudo rm -rf /home/semaphore/.stack
             - sudo rm -rf /usr/lib/jvm
             - sudo rm -rf /opt/*
-            - >-
-              echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
+            - echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
             - sudo service docker restart
+            - df -h
+            - docker pull zephyrprojectrtos/ci:v0.9.1
             - df -h
             - >-
               docker run
