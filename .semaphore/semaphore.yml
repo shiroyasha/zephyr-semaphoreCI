@@ -30,7 +30,8 @@ blocks:
             - sudo rm -rf /home/semaphore/.stack
             - sudo rm -rf /usr/lib/jvm
             - sudo rm -rf /opt/*
-            - echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
+            - >-
+              echo '{ "registry-mirrors": [], "max-concurrent-downloads": 10 }' | sudo tee /etc/docker/daemon.json
             - sudo service docker restart
             - df -h
             - docker pull zephyrprojectrtos/ci:v0.9.1
